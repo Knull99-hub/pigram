@@ -1,0 +1,34 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(az cosmosdb keys list --name pixgram-cosmos --resource-group pixgram-rg --query \"primaryMasterKey\" -o tsv)",
+      "PowerShell(az storage account keys list --account-name pixgrammedia --resource-group pixgram-rg --query \"[0].value\" -o tsv)",
+      "PowerShell(az cosmosdb sql database create --account-name pixgram-cosmos --resource-group pixgram-rg --name pixgram 2>&1)",
+      "PowerShell(az storage container create --name media --account-name pixgrammedia --public-access blob 2>&1)",
+      "PowerShell(az appservice plan create --name pixgram-plan --resource-group pixgram-rg --sku B1 --is-linux --location switzerlandnorth 2>&1)",
+      "PowerShell(az storage container create --name media --account-name pixgrammedia --account-key \"hqEVZJDRtX1wbjU/UsiL860l/jHLc3pt7yMcMId4eeIp0p42GqUO/EIBNrHhRKsLyRmcZ4KsRlV3+ASt9tqcow==\" --public-access blob 2>&1)",
+      "PowerShell(az webapp create --name pixgram-api --resource-group pixgram-rg --plan pixgram-plan --runtime \"NODE:20-lts\" 2>&1)",
+      "PowerShell(az storage container show --name media --account-name pixgrammedia --account-key \"hqEVZJDRtX1wbjU/UsiL860l/jHLc3pt7yMcMId4eeIp0p42GqUO/EIBNrHhRKsLyRmcZ4KsRlV3+ASt9tqcow==\" 2>&1)",
+      "PowerShell(az webapp create --name pixgram-api --resource-group pixgram-rg --plan pixgram-plan --runtime \"NODE:22-lts\" 2>&1)",
+      "PowerShell(az storage container list --account-name pixgrammedia --account-key \"hqEVZJDRtX1wbjU/UsiL860l/jHLc3pt7yMcMId4eeIp0p42GqUO/EIBNrHhRKsLyRmcZ4KsRlV3+ASt9tqcow==\" --query \"[].name\" -o tsv 2>&1)",
+      "PowerShell(az storage container create --name media --connection-string $connStr --public-access blob)",
+      "PowerShell($connStr = \"DefaultEndpointsProtocol=https;AccountName=pixgrammedia;AccountKey=hqEVZJDRtX1wbjU/UsiL860l/jHLc3pt7yMcMId4eeIp0p42GqUO/EIBNrHhRKsLyRmcZ4KsRlV3+ASt9tqcow==;EndpointSuffix=core.windows.net\")",
+      "PowerShell(az storage container list --connection-string $connStr -o table)",
+      "PowerShell(az cosmosdb sql database list --account-name pixgram-cosmos --resource-group pixgram-rg --query \"[].name\" -o tsv)",
+      "PowerShell(az storage container list --account-name pixgrammedia --account-key \"hqEVZJDRtX1wbjU/UsiL860l/jHLc3pt7yMcMId4eeIp0p42GqUO/EIBNrHhRKsLyRmcZ4KsRlV3+ASt9tqcow==\" --query \"[].name\" -o tsv)",
+      "PowerShell(az webapp list --resource-group pixgram-rg --query \"[].{name:name,state:state,url:defaultHostName}\" -o table)",
+      "PowerShell(az storage account show --name pixgrammedia --resource-group pixgram-rg --query \"allowBlobPublicAccess\" -o tsv)",
+      "PowerShell(az storage account update --name pixgrammedia --resource-group pixgram-rg --allow-blob-public-access true --query \"allowBlobPublicAccess\" -o tsv)",
+      "PowerShell(az storage container create --name media --account-name pixgrammedia --account-key \"hqEVZJDRtX1wbjU/UsiL860l/jHLc3pt7yMcMId4eeIp0p42GqUO/EIBNrHhRKsLyRmcZ4KsRlV3+ASt9tqcow==\" --public-access blob --query \"created\" -o tsv)",
+      "PowerShell(az webapp list --resource-group pixgram-rg --query \"[].{name:name,state:state,hostName:defaultHostName}\" -o table 2>&1)",
+      "PowerShell(az staticwebapp list --resource-group pixgram-rg --query \"[].{name:name,url:defaultHostname}\" -o table 2>&1)",
+      "PowerShell(az webapp deployment github-actions add --name pixgram-api --resource-group pixgram-rg --repo \"Knull99-hub/Instagram_clone\" --branch main --github-pat \"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\" --runtime \"node|20LTS\" 2>&1 | Where-Object { $_ -notmatch \"UserWarning|cryptography|32-bit|64-bit\" })",
+      "PowerShell(az resource update --resource-group pixgram-rg --name scm --namespace Microsoft.Web --resource-type basicPublishingCredentialsPolicies --parent sites/pixgram-api --set properties.allow=true 2>&1 | Where-Object { $_ -notmatch \"UserWarning|cryptography|32-bit|64-bit\" })",
+      "PowerShell(az staticwebapp create --name pixgram-web --resource-group pixgram-rg --source \"https://github.com/Knull99-hub/Instagram_clone\" --branch main --app-location \"frontend\" --output-location \"dist\" --github-pat \"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\" 2>&1 | Where-Object { $_ -notmatch \"UserWarning|cryptography|32-bit|64-bit\" })",
+      "PowerShell(az staticwebapp create --name pixgram-web --resource-group pixgram-rg --source \"https://github.com/Knull99-hub/Instagram_clone\" --branch main --app-location \"frontend\" --output-location \"dist\" --token \"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\" --location \"westeurope\" 2>&1 | Where-Object { $_ -notmatch \"UserWarning|cryptography|32-bit|64-bit\" })",
+      "PowerShell(az staticwebapp list --resource-group pixgram-rg --query \"[].{name:name,url:defaultHostname,location:location}\" -o table 2>&1 | Where-Object { $_ -notmatch \"UserWarning|cryptography|32-bit|64-bit\" })",
+      "PowerShell(az storage blob service-properties update --account-name pixgrammedia --static-website --index-document index.html --404-document index.html 2>&1 | Where-Object { $_ -notmatch \"UserWarning|cryptography|32-bit|64-bit\" })",
+      "Bash(git push *)"
+    ]
+  }
+}
