@@ -28,7 +28,10 @@
       "PowerShell(az staticwebapp create --name pixgram-web --resource-group pixgram-rg --source \"https://github.com/Knull99-hub/Instagram_clone\" --branch main --app-location \"frontend\" --output-location \"dist\" --token \"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\" --location \"westeurope\" 2>&1 | Where-Object { $_ -notmatch \"UserWarning|cryptography|32-bit|64-bit\" })",
       "PowerShell(az staticwebapp list --resource-group pixgram-rg --query \"[].{name:name,url:defaultHostname,location:location}\" -o table 2>&1 | Where-Object { $_ -notmatch \"UserWarning|cryptography|32-bit|64-bit\" })",
       "PowerShell(az storage blob service-properties update --account-name pixgrammedia --static-website --index-document index.html --404-document index.html 2>&1 | Where-Object { $_ -notmatch \"UserWarning|cryptography|32-bit|64-bit\" })",
-      "Bash(git push *)"
+      "Bash(git push *)",
+      "WebFetch(domain:api.github.com)",
+      "Bash(git add *)",
+      "Bash(git rm *)"
     ]
   }
 }
