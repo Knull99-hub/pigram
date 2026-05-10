@@ -29,7 +29,7 @@ export class RatingsRepository {
       const oldValue = existing.value;
       const updated = { ...existing, value };
       const { resource } = await this.container.items.upsert(updated);
-      return { rating: resource as Rating, isNew: false, oldValue };
+      return { rating: resource as unknown as Rating, isNew: false, oldValue };
     }
     const doc: Rating = { id: uuidv4(), postId, userId, value, createdAt: new Date().toISOString() };
     const { resource } = await this.container.items.create(doc);
