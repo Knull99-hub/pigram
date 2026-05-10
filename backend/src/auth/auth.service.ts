@@ -19,7 +19,20 @@ export class AuthService {
     const passwordHash = await bcrypt.hash(dto.password, 12);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...rest } = dto;
-    const user = await this.usersService.create({ ...rest, passwordHash, avatarUrl: '', bio: '', website: '', location: '' });
+    const user = await this.usersService.create({ ...rest, role: 'consumer', passwordHash, avatarUrl: '', bio: '', website: '', location: '' });
+    const token = this.jwt.sign({ sub: user.id, email: user.email });
+    return { token, user: this.usersService.sanitize(user) };
+  }
+
+  async createCreator(dto: RegisterDto) {
+    const existing = await this.usersService.findByEmail(dto.email);
+    if (existing) throw new ConflictException('Email already in use');
+    const usernameExists = await this.usersService.findByUsername(dto.username);
+    if (usernameExists) throw new ConflictException('Username already taken');
+    const passwordHash = await bcrypt.hash(dto.password, 12);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, ...rest } = dto;
+    const user = await this.usersService.create({ ...rest, role: 'creator', passwordHash, avatarUrl: '', bio: '', website: '', location: '' });
     const token = this.jwt.sign({ sub: user.id, email: user.email });
     return { token, user: this.usersService.sanitize(user) };
   }

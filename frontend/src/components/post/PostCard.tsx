@@ -2,11 +2,13 @@ import { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { formatDistanceToNow } from 'date-fns';
-import { Heart, MessageCircle, Bookmark, MoreHorizontal } from 'lucide-react';
+import { Heart, MessageCircle, Bookmark, MoreHorizontal, MapPin, Users } from 'lucide-react';
 import { likesApi } from '../../api/likes';
 import { savesApi } from '../../api/saves';
+import { ratingsApi } from '../../api/ratings';
 import { useAuthStore } from '../../store/auth.store';
 import Avatar from '../ui/Avatar';
+import StarRating from '../ui/StarRating';
 import type { Post } from '../../types';
 
 interface PostCardProps {
@@ -39,6 +41,11 @@ export default function PostCard({ post, onOpenComments }: PostCardProps) {
     mutationFn: () => post.saved ? savesApi.unsave(post.id) : savesApi.save(post.id),
     onMutate: () => update({ saved: !post.saved }),
     onError: () => update({ saved: post.saved }),
+  });
+
+  const rateMut = useMutation({
+    mutationFn: (value: number) => ratingsApi.rate(post.id, value),
+    onMutate: (value) => update({ userRating: value }),
   });
 
   const handleDoubleTap = () => {
@@ -105,6 +112,10 @@ export default function PostCard({ post, onOpenComments }: PostCardProps) {
             <p className="text-sm font-semibold">{post.likeCount.toLocaleString()} likes</p>
           )}
 
+          {post.title && (
+            <p className="text-sm font-semibold">{post.title}</p>
+          )}
+
           {post.caption && (
             <p className="text-sm">
               <Link to={`/profile/${post.creatorUsername}`} className="font-semibold mr-2">{post.creatorUsername}</Link>
@@ -112,9 +123,36 @@ export default function PostCard({ post, onOpenComments }: PostCardProps) {
             </p>
           )}
 
+          {post.location && (
+            <p className="text-xs text-gray-500 flex items-center gap-1">
+              <MapPin size={12} /> {post.location}
+            </p>
+          )}
+
+          {post.peoplePresent?.length > 0 && (
+            <p className="text-xs text-gray-500 flex items-center gap-1">
+              <Users size={12} /> {post.peoplePresent.join(', ')}
+            </p>
+          )}
+
           {post.tags?.length > 0 && (
             <p className="text-sm text-blue-500">{post.tags.map(t => `#${t}`).join(' ')}</p>
           )}
+
+          <div className="flex items-center justify-between pt-1">
+            <div className="flex items-center gap-2">
+              <StarRating
+                value={post.userRating ?? 0}
+                onChange={user?.role === 'consumer' ? (v) => rateMut.mutate(v) : undefined}
+                readonly={user?.role !== 'consumer'}
+              />
+              {post.ratingCount > 0 && (
+                <span className="text-xs text-gray-400">
+                  {(post.ratingSum / post.ratingCount).toFixed(1)} ({post.ratingCount})
+                </span>
+              )}
+            </div>
+          </div>
 
           {post.commentCount > 0 && (
             <button

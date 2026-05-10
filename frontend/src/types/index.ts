@@ -19,13 +19,19 @@ export interface Post {
   creatorUsername: string;
   creatorAvatarUrl: string;
   imageUrl: string;
+  title: string;
   caption: string;
+  location: string;
+  peoplePresent: string[];
   tags: string[];
   likeCount: number;
   commentCount: number;
   saveCount: number;
+  ratingCount: number;
+  ratingSum: number;
   liked?: boolean;
   saved?: boolean;
+  userRating?: number;
   createdAt: string;
   updatedAt: string;
 }

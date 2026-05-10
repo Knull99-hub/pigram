@@ -2,10 +2,13 @@ import client from './client';
 import type { Post, Comment } from '../types';
 
 export const postsApi = {
-  create: (data: { caption: string; tags: string[]; file: File }) => {
+  create: (data: { title: string; caption: string; location: string; peoplePresent: string[]; tags: string[]; file: File }) => {
     const form = new FormData();
     form.append('file', data.file);
+    form.append('title', data.title);
     form.append('caption', data.caption);
+    form.append('location', data.location);
+    form.append('peoplePresent', JSON.stringify(data.peoplePresent));
     form.append('tags', JSON.stringify(data.tags));
     return client.post<Post>('/posts', form, {
       headers: { 'Content-Type': 'multipart/form-data' },

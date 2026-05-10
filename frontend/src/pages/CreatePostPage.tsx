@@ -13,7 +13,10 @@ export default function CreatePostPage() {
   const fileRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
+  const [title, setTitle] = useState('');
   const [caption, setCaption] = useState('');
+  const [location, setLocation] = useState('');
+  const [peopleInput, setPeopleInput] = useState('');
   const [tagsInput, setTagsInput] = useState('');
 
   const handleFile = (f: File) => {
@@ -25,7 +28,10 @@ export default function CreatePostPage() {
   const createMut = useMutation({
     mutationFn: () => postsApi.create({
       file: file!,
+      title,
       caption,
+      location,
+      peoplePresent: peopleInput.split(',').map(t => t.trim()).filter(Boolean),
       tags: tagsInput.split(',').map(t => t.trim().replace(/^#/, '')).filter(Boolean),
     }),
     onSuccess: () => {
@@ -65,6 +71,14 @@ export default function CreatePostPage() {
               </button>
             </div>
 
+            <input
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="Title *"
+              maxLength={100}
+              className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-gray-500"
+            />
+
             <textarea
               value={caption}
               onChange={(e) => setCaption(e.target.value)}
@@ -72,6 +86,20 @@ export default function CreatePostPage() {
               maxLength={2200}
               rows={3}
               className="w-full border border-gray-300 rounded-lg p-3 text-sm resize-none focus:outline-none focus:border-gray-500"
+            />
+
+            <input
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+              placeholder="Location (e.g. Paris, France)"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-gray-500"
+            />
+
+            <input
+              value={peopleInput}
+              onChange={(e) => setPeopleInput(e.target.value)}
+              placeholder="People present (comma separated)"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-gray-500"
             />
 
             <input
@@ -83,7 +111,7 @@ export default function CreatePostPage() {
 
             <button
               onClick={() => createMut.mutate()}
-              disabled={createMut.isPending}
+              disabled={createMut.isPending || !title.trim()}
               className="w-full bg-blue-500 text-white font-semibold py-3 rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
             >
               {createMut.isPending ? <><Spinner size="sm" /> Sharing...</> : 'Share'}

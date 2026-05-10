@@ -31,13 +31,24 @@ export default function Sidebar() {
       </Link>
 
       <nav className="flex flex-col gap-1 flex-1">
-        {navItem('/', Home, 'Home')}
-        {navItem('/search', Search, 'Search')}
-        {navItem('/discover', Compass, 'Explore')}
-        {navItem('/notifications', Heart, 'Notifications')}
-        {user?.role === 'creator' && navItem('/create', PlusSquare, 'Create')}
-        {navItem('/saved', Bookmark, 'Saved')}
-        {user && navItem(`/profile/${user.username}`, User, 'Profile')}
+        {user?.role === 'creator' ? (
+          <>
+            {navItem('/', Home, 'Creator Studio')}
+            {navItem('/create', PlusSquare, 'New Post')}
+            {navItem('/discover', Compass, 'Explore')}
+            {navItem('/notifications', Heart, 'Notifications')}
+            {user && navItem(`/profile/${user.username}`, User, 'My Profile')}
+          </>
+        ) : (
+          <>
+            {navItem('/', Home, 'Home Feed')}
+            {navItem('/search', Search, 'Search')}
+            {navItem('/discover', Compass, 'Explore')}
+            {navItem('/notifications', Heart, 'Notifications')}
+            {navItem('/saved', Bookmark, 'Saved')}
+            {user && navItem(`/profile/${user.username}`, User, 'Profile')}
+          </>
+        )}
       </nav>
 
       <div className="mt-auto">

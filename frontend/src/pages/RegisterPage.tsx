@@ -13,7 +13,6 @@ export default function RegisterPage() {
     username: '',
     displayName: '',
     password: '',
-    role: 'consumer' as 'creator' | 'consumer',
   });
 
   const set = (k: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
@@ -65,18 +64,6 @@ export default function RegisterPage() {
             onChange={set('password')}
             className="w-full border border-gray-300 rounded-md px-3 py-2.5 text-sm bg-gray-50 focus:outline-none focus:border-gray-500"
           />
-
-          <div>
-            <label className="text-xs text-gray-500 block mb-1">Account Type</label>
-            <select
-              value={form.role}
-              onChange={set('role')}
-              className="w-full border border-gray-300 rounded-md px-3 py-2.5 text-sm bg-gray-50 focus:outline-none focus:border-gray-500"
-            >
-              <option value="consumer">Consumer (viewer)</option>
-              <option value="creator">Creator (can post photos)</option>
-            </select>
-          </div>
 
           <button
             onClick={() => registerMut.mutate()}

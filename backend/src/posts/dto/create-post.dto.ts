@@ -5,6 +5,11 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 export class CreatePostDto {
   @ApiProperty()
   @IsString()
+  @MaxLength(100)
+  title: string;
+
+  @ApiProperty()
+  @IsString()
   @MaxLength(2200)
   caption: string;
 

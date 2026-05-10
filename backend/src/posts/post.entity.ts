@@ -5,6 +5,7 @@ export interface Post {
   creatorAvatarUrl: string;
   imageUrl: string;
   blobName: string;
+  title: string;
   caption: string;
   location: string;
   peoplePresent: string[];
@@ -12,6 +13,8 @@ export interface Post {
   likeCount: number;
   commentCount: number;
   saveCount: number;
+  ratingCount: number;
+  ratingSum: number;
   createdAt: string;
   updatedAt: string;
 }

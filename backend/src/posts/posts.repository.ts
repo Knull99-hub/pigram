@@ -81,6 +81,14 @@ export class PostsRepository {
     await this.container.items.upsert({ ...post, [field]: Math.max(0, (post[field] || 0) + delta) });
   }
 
+  async updateRating(id: string, creatorId: string, oldValue: number, newValue: number, isNew: boolean): Promise<void> {
+    const post = await this.findById(id, creatorId);
+    if (!post) return;
+    const ratingSum = Math.max(0, (post.ratingSum || 0) - oldValue + newValue);
+    const ratingCount = Math.max(0, (post.ratingCount || 0) + (isNew ? 1 : 0));
+    await this.container.items.upsert({ ...post, ratingSum, ratingCount });
+  }
+
   async search(q: string, limit = 20): Promise<Post[]> {
     const { resources } = await this.container.items
       .query<Post>({

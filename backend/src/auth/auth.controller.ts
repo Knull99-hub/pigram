@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Body, UseGuards } from '@nestjs/common';
+import { Controller, Post, Get, Body, UseGuards, Headers, UnauthorizedException } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
@@ -15,6 +15,13 @@ export class AuthController {
   @Post('register')
   register(@Body() dto: RegisterDto) {
     return this.authService.register(dto);
+  }
+
+  @Post('admin/create-creator')
+  createCreator(@Headers('x-admin-key') key: string, @Body() dto: RegisterDto) {
+    const adminSecret = process.env.ADMIN_SECRET || 'pixgram-admin-2024';
+    if (key !== adminSecret) throw new UnauthorizedException('Invalid admin key');
+    return this.authService.createCreator(dto);
   }
 
   @Post('login')

@@ -27,10 +27,13 @@ export class PostsService {
       creatorAvatarUrl: creator?.avatarUrl ?? '',
       imageUrl,
       blobName: imageUrl,
+      title: dto.title,
       caption: dto.caption,
       location: dto.location ?? '',
       peoplePresent: dto.peoplePresent ?? [],
       tags: dto.tags ?? [],
+      ratingCount: 0,
+      ratingSum: 0,
     });
     await this.usersService.incrementCounter(creatorId, 'postCount', 1);
     await this.cache.delByPattern(`feed:${creatorId}:*`);
@@ -80,6 +83,11 @@ export class PostsService {
 
   async incrementCounter(id: string, creatorId: string, field: 'likeCount' | 'commentCount' | 'saveCount', delta: number) {
     await this.repo.incrementCounter(id, creatorId, field, delta);
+    await this.cache.del(`post:${id}`);
+  }
+
+  async updateRating(id: string, creatorId: string, oldValue: number, newValue: number, isNew: boolean) {
+    await this.repo.updateRating(id, creatorId, oldValue, newValue, isNew);
     await this.cache.del(`post:${id}`);
   }
 

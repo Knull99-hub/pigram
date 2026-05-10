@@ -16,6 +16,8 @@ import EditProfilePage from './pages/EditProfilePage';
 import NotificationsPage from './pages/NotificationsPage';
 import SavedPage from './pages/SavedPage';
 import PostDetailPage from './pages/PostDetailPage';
+import CreatorDashboardPage from './pages/CreatorDashboardPage';
+import AdminCreateCreatorPage from './pages/AdminCreateCreatorPage';
 
 const qc = new QueryClient({
   defaultOptions: {
@@ -57,6 +59,11 @@ function GuestOnly({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
+function RoleHome() {
+  const { user } = useAuthStore();
+  return user?.role === 'creator' ? <CreatorDashboardPage /> : <FeedPage />;
+}
+
 export default function App() {
   return (
     <QueryClientProvider client={qc}>
@@ -65,8 +72,9 @@ export default function App() {
           <Routes>
             <Route path="/login" element={<GuestOnly><LoginPage /></GuestOnly>} />
             <Route path="/register" element={<GuestOnly><RegisterPage /></GuestOnly>} />
+            <Route path="/admin/create-creator" element={<AdminCreateCreatorPage />} />
 
-            <Route path="/" element={<RequireAuth><FeedPage /></RequireAuth>} />
+            <Route path="/" element={<RequireAuth><RoleHome /></RequireAuth>} />
             <Route path="/discover" element={<RequireAuth><DiscoverPage /></RequireAuth>} />
             <Route path="/search" element={<RequireAuth><SearchPage /></RequireAuth>} />
             <Route path="/notifications" element={<RequireAuth><NotificationsPage /></RequireAuth>} />
